@@ -1,0 +1,8 @@
+AppId:786829101846026
+
+Accesstoken : EAALLne0dTgoBAB75byZCUiDP8EHZCdOWjij2qVhPJHKJ4rZAId2wmfZCJA3sgcYcAhgxdPGHlROgxhJnFw7cuZBRvJ6bLjxTKnh6zfpYhAomYV2LxmYVZB1UYoupww9TOXAt90OcNf3LwQWNkaZAuYocDxyXvYp4sqhf1dtxiuZBnAZDZD
+
+Verification token:fFRu/ZIhx5LWXCyQffzbUiwLEOpYZVErm3uZqjFxriU=
+
+	
+App Secret:cd24f31e1dc4087ac491cf52a2c40e06
