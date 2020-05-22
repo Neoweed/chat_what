@@ -9,7 +9,7 @@ attrs==19.3.0
 Automat==20.2.0
 backcall==0.1.0
 beautifulsoup4==4.6.0
-bleach==3.1.0
+bleach==3.1.4
 blinker==1.4
 bothub==0.1.30
 bothub-cli==0.1.20
