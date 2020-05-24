@@ -1,20 +1,26 @@
+#!groovy
 pipeline {
-  agent { docker { image 'python:3.6.9' } }
-  stages {
-    stage('build') {
+  agent any
+  stages 
+    {
+    stage('Clean') {
       steps {
-        sh 'pip install -r requirements.txt'
+        sh 'mvn clean package -DskipTests'
       }
     }
-    stage('test') {
+    stage('Build docker images') {
       steps {
-        sh 'python test.py'
+        sh 'docker build -t akhilank1937/akhilbuild:1.0 .'
       }
-      post {
-        always {
-          junit 'test-reports/*.xml'
+    }
+    stage('Docker Hub') {
+      steps 
+      {
+        withDockerRegistry([credentialsId: 'DockerHub', url:""])
+        {
+          sh 'docker push akhilank1937/akhilbuild:1.0'
         }
-      }    
+      }
     }
   }
 }
