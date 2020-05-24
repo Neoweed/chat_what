@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings("ignore")
 import sys
 
-app = Flask(__name__)
+
 
 stemmer = LancasterStemmer()
 def cleanup(sentence):
@@ -31,7 +31,7 @@ le = LE()
 
 tfv = TfidfVectorizer(min_df=1, stop_words='english')
 
-data = pd.read_csv('FAQs.csv')
+data = pd.read_csv('add.csv')
 questions = data['Question'].values
 
 X = []
@@ -65,119 +65,39 @@ def get_max5(arr):
     return ixs[::-1]
 
 
+app = Flask(__name__)
+
+
 @app.route('/bot', methods=['POST'])
 def bot():
-    usr = request.values.get('Body', '').lower()
+    incoming_msg = request.values.get('Body', '').lower()
     resp = MessagingResponse()
     msg = resp.message()
     responded = False
     cnt = 0
-
-    #print("PRESS Q to QUIT")
-    #print("TYPE \"DEBUG\" to Display Debugging statements.")
-    #print("TYPE \"STOP\" to Stop Debugging statements.")
-    #print("TYPE \"TOP\" to Display most relevent result")
-    #print("TYPE \"CONF\" to Display the most confident result")
-    #print()
-    #print()
     DEBUG = False
     TOP5 = False
-
-    msg.body("Bot: Hi, Welcome to our bank!")
-    respond = True
-    while True:
-        usr = request.values.get('Body', '').lower()
-        #usr = input("You: ")
-        #usr='hi'
-        if usr.lower() == 'yes':
-            msg.body("Bot: Yes!")
-            responded = True
-            continue
-
-        if usr.lower() == 'no':
-            msg.body("Bot: No?")
-            responded = True
-            continue
-
-        if usr == 'DEBUG':
-            DEBUG = True
-            msg.body("Debugging mode on")
-            responded = True
-            continue
-
-        if usr == 'STOP':
-            DEBUG = False
-            msg.body("Debugging mode off")
-            responded = True
-            continue
-
-        if usr == 'Q':
-            msg.body("Bot: It was good to be of help.")
-            responded = True
-            break
-
-        if usr == 'hi':
-            TOP5 = True
-            msg.body("Will display most relevent result now")
-            responded = True
-            continue
-
-        if usr == 'CONF':
-            TOP5 = False
-            msg.body("Only the most relevent result will be displayed")
-            responded = True
-            continue
-
-        t_usr = tfv.transform([cleanup(usr.strip().lower())])
-        class_ = le.inverse_transform(model.predict(t_usr)[0])
-        questionset = data[data['Class']==class_]
-
-        if DEBUG:
-            msg.body("Question classified under category:", class_)
-            responded = True
-            msg.body("{} Questions belong to this class".format(len(questionset)))
-            responded = True
-
-        cos_sims = []
-        for question in questionset['Question']:
-            sims = cosine_similarity(tfv.transform([question]), t_usr)
-            cos_sims.append(sims)
+    usr = incoming_msg
+    if usr == 'hi':
+       TOP5 = True
+       #print("Will display most relevent result now")
+    t_usr = tfv.transform([cleanup(usr.strip().lower())])
+    class_ = le.inverse_transform(model.predict(t_usr)[0])
+    questionset = data[data['Class']==class_]
+    cos_sims = []
+    for question in questionset['Question']:
+       sims = cosine_similarity(tfv.transform([question]), t_usr)
+       cos_sims.append(sims)
             
-        ind = cos_sims.index(max(cos_sims))
-
-        if DEBUG:
-            question = questionset["Question"][questionset.index[ind]]
-            msg.body("Assuming you asked: {}".format(question))
-            responded = True
-
-        if not TOP5:
-            msg.body("Bot:", data['Answer'][questionset.index[ind]])
-            responded = True
-        else:
-            inds = get_max5(cos_sims)
-            for ix in inds:
-                msg.body("Question: "+data['Question'][questionset.index[ix]])
-                msg.body("Answer: "+data['Answer'][questionset.index[ix]])
-                msg.body('-'*50)
-
-        #print("\n"*2)
-        #usr = input("You:")
-        """ outcome = input("Was this answer helpful? Yes/No: ").lower().strip()
-        if outcome == 'yes':
-            cnt = 0
-        elif outcome == 'no':
-            inds = get_max5(cos_sims)
-            sugg_choice = input("Bot: Do you want me to suggest you questions ? Yes/No: ").lower()
-            if sugg_choice == 'yes':
-                q_cnt = 1
-                for ix in inds:
-                    print(q_cnt,"Question: "+data['Question'][questionset.index[ix]])
-                    # print("Answer: "+data['Answer'][questionset.index[ix]])
-                    print('-'*50)
-                    q_cnt += 1
-                num = int(input("Please enter the question number you find most relevant: "))
-                print("Bot: ", data['Answer'][questionset.index[inds[num-1]]])
-    if 'quote' in incoming_msg:
+    ind = cos_sims.index(max(cos_sims))
+    if not TOP5:
+       str1 = "Bot: " + data['Answer'][questionset.index[ind]]
+       msg.body(str1)
+       responded =True
+    return str(resp)   
+    
+    #print("\n"*2)
+    '''if 'quote' in incoming_msg:
         # return a quote
         r = requests.get('https://api.quotable.io/random')
         if r.status_code == 200:
@@ -193,8 +113,8 @@ def bot():
         responded = True
     if not responded:
         msg.body('I only know about famous quotes and cats, sorry!')
-    return str(resp)
-"""
+    return str(resp)'''
+
 
 if __name__ == '__main__':
     app.run()
