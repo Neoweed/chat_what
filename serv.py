@@ -123,9 +123,9 @@ if __name__ == '__main__':
     #app.run()
     action_process = Process(target=app.run)
  
-    # We start the process and we block for 5 seconds.
+    # We start the process and we block for 30 seconds.
     action_process.start()
-    action_process.join(timeout=150)
+    action_process.join(timeout=30)
  
     # We terminate the process.
     action_process.terminate()
