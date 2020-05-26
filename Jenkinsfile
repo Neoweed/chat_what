@@ -23,15 +23,18 @@ pipeline {
       }
     }
     stage('Execute Rundeck job') {
-      script {
+      steps {
+  script {
     step([$class: "RundeckNotifier",
           includeRundeckLogs: true,
           jobId: "56b09f91-4460-4e8b-a1b7-ae5d9af86fb6",
           rundeckInstance: "Default",
           shouldFailTheBuild: true,
           shouldWaitForRundeckJob: true,
+          tags: "",
           tailLog: true])
   }
-   }
+}
   } 
   }
+}
