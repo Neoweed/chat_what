@@ -12,6 +12,7 @@ from sklearn.preprocessing import LabelEncoder as LE
 from sklearn.metrics.pairwise import cosine_similarity
 import random
 import nltk
+nltk.download('punkt')
 from nltk.stem.lancaster import LancasterStemmer
 import warnings
 warnings.filterwarnings("ignore")
@@ -68,7 +69,7 @@ def get_max5(arr):
 app = Flask(__name__)
 
 
-@app.route('/bot', methods=['POST'])
+@app.route('/bot', methods=['Get','POST'])
 def bot():
     incoming_msg = request.values.get('Body', '').lower()
     resp = MessagingResponse()
