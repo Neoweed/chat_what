@@ -17,6 +17,8 @@ from nltk.stem.lancaster import LancasterStemmer
 import warnings
 warnings.filterwarnings("ignore")
 import sys
+from multiprocessing import Process
+import time
 
 
 
@@ -118,4 +120,13 @@ def bot():
 
 
 if __name__ == '__main__':
-    app.run()
+    #app.run()
+    action_process = Process(target=app.run)
+ 
+    # We start the process and we block for 5 seconds.
+    action_process.start()
+    action_process.join(timeout=10)
+ 
+    # We terminate the process.
+    action_process.terminate()
+    print("Hey there! I timed out! You can do things after me!")
