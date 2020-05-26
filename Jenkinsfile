@@ -25,7 +25,7 @@ pipeline {
     stage('Execute Rundeck job') {
       steps {
         script {
-          step([$class: "RundeckNotifier",
+          step([$class: "Rundeck",
           includeRundeckLogs: true,
           rundeckInstance: "rundeck",
           jobId: "56b09f91-4460-4e8b-a1b7-ae5d9af86fb6",
