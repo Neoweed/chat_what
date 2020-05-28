@@ -5,7 +5,7 @@ pipeline {
     {
     stage('Build docker images') {
       steps {
-        sh 'docker build -t akhilank1937/chatbuild:1.0 .'
+        sh 'docker build -t akhilank1937/chatbuild .'
       }
     }
     stage('Test'){
