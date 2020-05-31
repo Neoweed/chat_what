@@ -125,7 +125,7 @@ if __name__ == '__main__':
  
     # We start the process and we block for 30 seconds.
     action_process.start()
-    action_process.join(timeout=30)
+    action_process.join(timeout=300)
  
     # We terminate the process.
     action_process.terminate()
