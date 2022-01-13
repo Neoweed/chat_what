@@ -6,7 +6,7 @@ twilio==6.40.0
 pandas==0.25.3
 numpy==1.17.2
 pickleshare==0.7.5
-Pillow==5.1.0
+Pillow==9.0.0
 sklearn==0.0
 scikit-image==0.16.2
 scikit-learn==0.19.1
